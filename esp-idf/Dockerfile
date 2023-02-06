@@ -118,7 +118,6 @@ RUN : \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
-
 ARG TARGETPLATFORM
 ARG TARGETOS
 ARG TARGETARCH

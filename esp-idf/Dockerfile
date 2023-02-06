@@ -125,6 +125,7 @@ ARG BUILDPLATFORM
 ARG BUILDOS
 ARG BUILDARCH
 
+# Don't copy
 # COPY idf-env.sh /etc/profile.d/idf-env.sh
 RUN : \
   && cd $HOME/ \

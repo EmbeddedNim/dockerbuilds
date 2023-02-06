@@ -7,7 +7,7 @@ name: Docker
 
 on:
   schedule:
-    - cron: '26 20 * * 1'
+    - cron: '0 18 7 * *'
   push:
     paths:
       - 'esp-idf/Dockerfile'
@@ -20,7 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: ["5.0", "4.4"]
+        version: ["5.0", "4.4", "4.3", "4.2", "4.1"]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,7 +36,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: 'arm64,arm'
+          platforms: 'arm64'
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
       - name: Setup Docker buildx
@@ -71,7 +71,8 @@ jobs:
           context: .
           file: esp-idf/Dockerfile
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm
+          # platforms: linux/amd64,linux/arm64,linux/arm
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/embeddednim/esp-idf-${{ matrix.version }}-${{ env.DATE }},ghcr.io/embeddednim/esp-idf-${{ matrix.version }}-latest
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}

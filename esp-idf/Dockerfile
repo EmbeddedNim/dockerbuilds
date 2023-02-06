@@ -117,9 +117,6 @@ RUN : \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
-RUN : \
-    && printf '[safe]\n       directory = /opt/esp/idf\n' >> /home/vscode/.gitconfig
-
 
 ARG TARGETPLATFORM
 ARG TARGETOS

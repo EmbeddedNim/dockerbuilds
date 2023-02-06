@@ -72,7 +72,7 @@ jobs:
           file: esp-idf/Dockerfile
           platforms: linux/amd64
           # platforms: linux/amd64,linux/arm64,linux/arm
-          tags: esp-idf-${{ matrix.version }}-${{ env.DATE }},esp-idf-${{ matrix.version }}-latest
+          tags: esp-idf-${{ matrix.version }}-${{ DATE }},esp-idf-${{ matrix.version }}-latest
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}
           cache-from: type=gha

@@ -3,36 +3,36 @@ FROM debian:unstable-slim
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN : \
-  && sudo apt-get update \
-  && sudo apt-get install -y \
-    apt-utils \
-    bison \
-    ca-certificates \
-    ccache \
-    check \
-    curl \
-    flex \
-    git \
-    git-lfs \
-    gperf \
-    lcov \
-    libbsd-dev \
-    libffi-dev \
-    libncurses-dev \
-    libusb-1.0-0-dev \
-    make \
-    ninja-build \
-    python3 \
-    python3-venv \
-    python3-pip \
-    ruby \
-    unzip \
-    wget \
-    xz-utils \
-    zip \
-  && sudo apt-get autoremove -y \
-  && sudo rm -rf /var/lib/apt/lists/* \
-  && sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10 \
+  && apt-get update \
+  && apt-get install -y \
+        apt-utils \
+        bison \
+        ca-certificates \
+        ccache \
+        check \
+        curl \
+        flex \
+        git \
+        git-lfs \
+        gperf \
+        lcov \
+        libbsd-dev \
+        libffi-dev \
+        libncurses-dev \
+        libusb-1.0-0-dev \
+        make \
+        ninja-build \
+        python3 \
+        python3-venv \
+        python3-pip \
+        ruby \
+        unzip \
+        wget \
+        xz-utils \
+        zip \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/* \
+  && update-alternatives --install /usr/bin/python python /usr/bin/python3 10 \
   && :
 
 # To build the image for a branch or a tag of IDF, pass --build-arg IDF_CLONE_BRANCH_OR_TAG=name.
@@ -117,8 +117,6 @@ RUN : \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
     && echo 'source /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
-USER vscode
-
 RUN : \
     && printf '[safe]\n       directory = /opt/esp/idf\n' >> /home/vscode/.gitconfig
 
@@ -144,7 +142,7 @@ RUN : \
     && NIM_PLATFORM=${TARGETOS}_${TARCH} \
     && wget https://github.com/nim-lang/nightlies/releases/download/latest-version-1-6/${NIM_PLATFORM}.tar.xz \
     && tar xf ${NIM_PLATFORM}.tar.xz \
-    && sudo mv nim-* /usr/local/ \
+    && mv nim-* /usr/local/ \
     && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \
-      do sudo ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
+      do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
     done

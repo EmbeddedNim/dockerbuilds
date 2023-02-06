@@ -142,3 +142,5 @@ RUN : \
     && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \
       do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
     done
+
+ARG LASTEDIT=1

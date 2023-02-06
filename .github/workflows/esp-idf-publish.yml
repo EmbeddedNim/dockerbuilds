@@ -20,7 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: ["5.0", "4.4", "4.0"]
+        version: ["5.0", "4.0"]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -70,8 +70,8 @@ jobs:
         with:
           context: .
           file: esp-idf/Dockerfile
-          platforms: linux/amd64
-          # platforms: linux/amd64,linux/arm64,linux/arm
+          push: true
+          platforms: linux/amd64,linux/arm64
           tags: esp-idf-${{ matrix.version }}-${{ env.DATE }},esp-idf-${{ matrix.version }}-latest
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}

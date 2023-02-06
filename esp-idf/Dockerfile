@@ -80,7 +80,7 @@ RUN : \
 ENV IDF_PYTHON_CHECK_CONSTRAINTS=no
 
 # Ccache is installed, enable it by default
-# ENV IDF_CCACHE_ENABLE=1
+ENV IDF_CCACHE_ENABLE=1
 
 # Install QEMU runtime dependencies
 RUN : \

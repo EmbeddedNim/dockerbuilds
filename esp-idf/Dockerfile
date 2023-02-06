@@ -30,6 +30,7 @@ RUN : \
         wget \
         xz-utils \
         zip \
+        zsh \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/* \
   && update-alternatives --install /usr/bin/python python /usr/bin/python3 10 \

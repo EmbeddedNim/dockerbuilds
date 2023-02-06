@@ -20,7 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: ["5.0", "4.4", "4.3", "4.2", "4.1"]
+        version: ["5.0", "4.4"]
     runs-on: ubuntu-latest
     permissions:
       contents: read

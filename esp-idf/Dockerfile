@@ -143,4 +143,4 @@ RUN : \
       do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
     done
 
-ARG LASTEDIT=3
+ARG LASTEDIT=4

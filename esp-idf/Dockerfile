@@ -107,8 +107,6 @@ ENV PATH=/opt/qemu/bin:${PATH}
 # Call idf_tools.py to export tool paths
 ENV IDF_TOOLS_EXPORT_CMD=${IDF_PATH}/export.sh
 ENV IDF_TOOLS_INSTALL_CMD=${IDF_PATH}/install.sh
-# Allow calling some IDF python tools without specifying the full path
-# ${IDF_PATH}/tools is already added by 'idf_tools.py export'
 ENV IDF_ADD_PATHS_EXTRAS="${IDF_PATH}/components/esptool_py/esptool"
 ENV IDF_ADD_PATHS_EXTRAS="${IDF_ADD_PATHS_EXTRAS}:${IDF_PATH}/components/espcoredump"
 ENV IDF_ADD_PATHS_EXTRAS="${IDF_ADD_PATHS_EXTRAS}:${IDF_PATH}/components/partition_table"

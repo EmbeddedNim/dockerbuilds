@@ -31,6 +31,8 @@ RUN : \
         xz-utils \
         zip \
         zsh \
+        libglib2.0-0 \
+        libpixman-1-0 \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/* \
   && update-alternatives --install /usr/bin/python python /usr/bin/python3 10 \
@@ -69,10 +71,11 @@ RUN echo IDF_CHECKOUT_REF=$IDF_CHECKOUT_REF IDF_CLONE_BRANCH_OR_TAG=$IDF_CLONE_B
 
 # Install all the required tools
 RUN : \
-  && update-ca-certificates --fresh \
-  && $IDF_PATH/tools/idf_tools.py --non-interactive install required \
-  && $IDF_PATH/tools/idf_tools.py --non-interactive install cmake \
-  && $IDF_PATH/tools/idf_tools.py --non-interactive install-python-env \
+  && update-ca-certificates --fresh
+
+RUN : \
+  && cd $IDF_PATH/ \
+  && ./install.sh esp32 \
   && rm -rf $IDF_TOOLS_PATH/dist \
   && :
 
@@ -82,15 +85,6 @@ ENV IDF_PYTHON_CHECK_CONSTRAINTS=no
 
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1
-
-# Install QEMU runtime dependencies
-RUN : \
-  && apt-get update && apt-get install -y -q \
-    libglib2.0-0 \
-    libpixman-1-0 \
-  && rm -rf /var/lib/apt/lists/* \
-  && :
-
 
 # Install QEMU
 ARG QEMU_VER=esp-develop-20220919

@@ -1,4 +1,4 @@
-FROM debian:unstable-slim
+FROM debian:unstable-slim as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -73,15 +73,14 @@ RUN echo IDF_CHECKOUT_REF=$IDF_CHECKOUT_REF IDF_CLONE_BRANCH_OR_TAG=$IDF_CLONE_B
 RUN : \
   && update-ca-certificates --fresh
 
+FROM base as build
+
+SHELL ["/bin/bash", "-c"]
+
 RUN : \
   && cd $IDF_PATH/ \
   && ./install.sh esp32 \
-  && rm -rf $IDF_TOOLS_PATH/dist \
-  && :
-
-# The constraint file has been downloaded and the right Python package versions installed. No need to check and
-# download this at every invocation of the container.
-ENV IDF_PYTHON_CHECK_CONSTRAINTS=no
+  && rm -rf $IDF_TOOLS_PATH/dist
 
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1

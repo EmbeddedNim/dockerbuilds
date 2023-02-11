@@ -73,7 +73,7 @@ jobs:
           push: true
           # platforms: linux/amd64,linux/arm64,linux/arm
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/embeddednim/esp-idf-${{ matrix.version }}-${{ env.DATE }},ghcr.io/embeddednim/esp-idf-${{ matrix.version }}-latest
+          tags: ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-${{ env.DATE }},ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-latest
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}
           cache-from: type=gha

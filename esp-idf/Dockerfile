@@ -1,123 +1,14 @@
-FROM debian:unstable-slim as base
+FROM espressif/idf:release-v4.4 as base
 
 ARG DEBIAN_FRONTEND=noninteractive
-
-RUN : \
-  && apt-get update \
-  && apt-get install -y \
-        apt-utils \
-        bison \
-        ca-certificates \
-        ccache \
-        check \
-        curl \
-        flex \
-        git \
-        git-lfs \
-        gperf \
-        lcov \
-        libbsd-dev \
-        libffi-dev \
-        libncurses-dev \
-        libusb-1.0-0-dev \
-        make \
-        ninja-build \
-        python3 \
-        python3-venv \
-        python3-pip \
-        ruby \
-        unzip \
-        wget \
-        xz-utils \
-        zip \
-        zsh \
-        libglib2.0-0 \
-        libpixman-1-0 \
-  && apt-get autoremove -y \
-  && rm -rf /var/lib/apt/lists/* \
-  && update-alternatives --install /usr/bin/python python /usr/bin/python3 10 \
-  && :
-
-# To build the image for a branch or a tag of IDF, pass --build-arg IDF_CLONE_BRANCH_OR_TAG=name.
-# To build the image with a specific commit ID of IDF, pass --build-arg IDF_CHECKOUT_REF=commit-id.
-# It is possibe to combine both, e.g.:
-#   IDF_CLONE_BRANCH_OR_TAG=release/vX.Y
-#   IDF_CHECKOUT_REF=<some commit on release/vX.Y branch>.
-# Use IDF_CLONE_SHALLOW=1 to peform shallow clone (i.e. --depth=1 --shallow-submodules)
-# Use IDF_INSTALL_TARGETS to install tools only for selected chip targets (CSV)
-
-ARG IDF_CLONE_URL=https://github.com/espressif/esp-idf.git
-ARG IDF_CLONE_BRANCH_OR_TAG=master
-ARG IDF_CHECKOUT_REF=
-ARG IDF_CLONE_SHALLOW=
-ARG IDF_INSTALL_TARGETS=all
-
-ENV IDF_PATH=/opt/esp/idf
-ENV IDF_TOOLS_PATH=/opt/esp
-
-RUN echo IDF_CHECKOUT_REF=$IDF_CHECKOUT_REF IDF_CLONE_BRANCH_OR_TAG=$IDF_CLONE_BRANCH_OR_TAG && \
-    git clone --recursive \
-      ${IDF_CLONE_SHALLOW:+--depth=1 --shallow-submodules} \
-      ${IDF_CLONE_BRANCH_OR_TAG:+-b $IDF_CLONE_BRANCH_OR_TAG} \
-      $IDF_CLONE_URL $IDF_PATH && \
-    if [ -n "$IDF_CHECKOUT_REF" ]; then \
-      cd $IDF_PATH && \
-      if [ -n "$IDF_CLONE_SHALLOW" ]; then \
-        git fetch origin --depth=1 --recurse-submodules ${IDF_CHECKOUT_REF}; \
-      fi && \
-      git checkout $IDF_CHECKOUT_REF && \
-      git submodule update --init --recursive; \
-    fi
-
-# Install all the required tools
-RUN : \
-  && update-ca-certificates --fresh
-
-FROM base as build
-
-SHELL ["/bin/bash", "-c"]
-
-RUN : \
-  && cd $IDF_PATH/ \
-  && ./install.sh esp32 \
-  && rm -rf $IDF_TOOLS_PATH/dist
 
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1
 
-# Install QEMU
-ARG QEMU_VER=esp-develop-20220919
-ARG QEMU_DIST=qemu-${QEMU_VER}.tar.bz2
-ARG QEMU_SHA256=f6565d3f0d1e463a63a7f81aec94cce62df662bd42fc7606de4b4418ed55f870
 RUN : \
-  && wget --no-verbose https://github.com/espressif/qemu/releases/download/${QEMU_VER}/${QEMU_DIST} \
-  && echo "${QEMU_SHA256} *${QEMU_DIST}" | sha256sum --check --strict - \
-  && tar -xf ${QEMU_DIST} -C /opt \
-  && rm ${QEMU_DIST} \
-  && :
-ENV PATH=/opt/qemu/bin:${PATH}
+    && echo '. /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
+    && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
-# Call idf_tools.py to export tool paths
-ENV IDF_TOOLS_EXPORT_CMD=${IDF_PATH}/export.sh
-ENV IDF_TOOLS_INSTALL_CMD=${IDF_PATH}/install.sh
-ENV IDF_ADD_PATHS_EXTRAS="${IDF_PATH}/components/esptool_py/esptool"
-ENV IDF_ADD_PATHS_EXTRAS="${IDF_ADD_PATHS_EXTRAS}:${IDF_PATH}/components/espcoredump"
-ENV IDF_ADD_PATHS_EXTRAS="${IDF_ADD_PATHS_EXTRAS}:${IDF_PATH}/components/partition_table"
-ENV IDF_ADD_PATHS_EXTRAS="${IDF_ADD_PATHS_EXTRAS}:${IDF_PATH}/components/app_update"
-
-RUN : \
-    && echo 'source /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
-    && echo 'source /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
-
-ARG TARGETPLATFORM
-ARG TARGETOS
-ARG TARGETARCH
-ARG BUILDPLATFORM
-ARG BUILDOS
-ARG BUILDARCH
-
-# Don't copy
-# COPY idf-env.sh /etc/profile.d/idf-env.sh
 RUN : \
   && cd $HOME/ \
     && case ${TARGETARCH} in \
@@ -135,5 +26,3 @@ RUN : \
     && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \
       do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
     done
-
-ARG LASTEDIT=11

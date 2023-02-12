@@ -2,6 +2,14 @@ FROM espressif/idf:release-v4.4 as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+RUN : \
+  && apt-get update \
+  && apt-get install -y \
+        zsh \
+        bison \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/*
+
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1
 

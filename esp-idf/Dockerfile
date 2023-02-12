@@ -17,6 +17,13 @@ RUN : \
     && echo '. /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
     && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG BUILDPLATFORM
+ARG BUILDOS
+ARG BUILDARCH
+
 RUN : \
   && cd $HOME/ \
     && case ${TARGETARCH} in \

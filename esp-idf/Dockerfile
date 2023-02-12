@@ -33,8 +33,8 @@ RUN : \
          "386")          TARCH=x32  ;; \
          *)              TARCH=${TARGETARCH} ;; \
        esac \
-    && env \
     && NIM_PLATFORM=${TARGETOS}_${TARCH} \
+    && env \
     && wget https://github.com/nim-lang/nightlies/releases/download/latest-version-1-6/${NIM_PLATFORM}.tar.xz \
     && tar xf ${NIM_PLATFORM}.tar.xz \
     && mv nim-* /usr/local/ \

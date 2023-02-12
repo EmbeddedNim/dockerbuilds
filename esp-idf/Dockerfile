@@ -7,6 +7,8 @@ RUN : \
   && apt-get install -y \
         zsh \
         bison \
+        psmisc \
+        iputils-ping \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/*
 

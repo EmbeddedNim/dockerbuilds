@@ -44,6 +44,7 @@ RUN : \
   && cd $HOME/ \
     && echo "IDF_VERSION: " ${IDF_VERSION} \
     && echo "NIM: " ${NIM_VERSION} \
+    && find $HOME/.asdf \
     && . $HOME/.asdf/asdf.sh \
     && asdf plugin-add nim \
     && asdf install nim ${NIM_VERSION} \

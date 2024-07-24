@@ -38,7 +38,7 @@ RUN : \
   && cd $HOME/ \
     && case ${TARGETARCH} in \
          "arm64")        TARCH=arm64  ;; \
-         "amd64")        TARCH=linux_x64  ;; \
+         "amd64")        TARCH=x64  ;; \
          "arm")          TARCH=arm  ;; \
          "386")          TARCH=x32  ;; \
          *)              TARCH=${TARGETARCH} ;; \

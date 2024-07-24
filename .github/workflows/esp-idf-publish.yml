@@ -32,6 +32,7 @@ jobs:
     strategy:
       matrix:
         version: ["5.0", "4.4"]
+        nim: ["1.6.20", "2.0.8"]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -84,9 +85,11 @@ jobs:
           push: true
           # platforms: linux/amd64,linux/arm64,linux/arm
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-${{ env.DATE }},ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-latest
+          tags: ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-${{ matrix.nim }}-${{ env.DATE }},ghcr.io/embeddednim/esp-idf:${{ matrix.version }}-${{ matrix.nim }}-latest
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}
+            IDF_VERSION=${{ matrix.version }}
+            NIM_VERSION=${{ matrix.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           secrets: |

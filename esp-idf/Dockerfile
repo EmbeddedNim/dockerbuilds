@@ -1,4 +1,7 @@
-FROM espressif/idf:release-v4.4 as base
+ARG IDF_VERSION=4.4
+ARG NIM_VERSION=1.6.20
+
+FROM espressif/idf:release-v${IDF_VERSION} as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -8,6 +11,10 @@ RUN : \
         zsh \
         bison \
         psmisc \
+        build-essential \
+        cmake \
+        vim \
+        gcc \
         iputils-ping \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/*
@@ -16,8 +23,13 @@ RUN : \
 ENV IDF_CCACHE_ENABLE=1
 
 RUN : \
+  && git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
+
+RUN : \
     && echo '. /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
-    && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
+    && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc \
+    && echo '. $HOME/.asdf/asdf.sh' >> /etc/bash.bashrc \
+    && echo '. $HOME/.asdf/asdf.sh' >> /etc/zsh/zshrc
 
 ARG TARGETPLATFORM
 ARG TARGETOS
@@ -30,18 +42,8 @@ ENV CACHE_NONCE=1
 
 RUN : \
   && cd $HOME/ \
-    && case ${TARGETARCH} in \
-         "arm64")        TARCH=arm64  ;; \
-         "amd64")        TARCH=x64  ;; \
-         "arm")          TARCH=arm  ;; \
-         "386")          TARCH=x32  ;; \
-         *)              TARCH=${TARGETARCH} ;; \
-       esac \
-    && NIM_PLATFORM=${TARGETOS}_${TARCH} \
-    && env \
-    && wget https://github.com/nim-lang/nightlies/releases/download/latest-version-1-6/${NIM_PLATFORM}.tar.xz \
-    && tar xf ${NIM_PLATFORM}.tar.xz \
-    && mv nim-* /usr/local/ \
-    && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \
-      do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
-    done
+    && echo "IDF_VERSION: " ${IDF_VERSION} \
+    && echo "NIM: " ${NIM_VERSION} \
+    && asdf plugin-add nim \
+    && asdf install nim ${NIM_VERSION} \
+    && echo "done"

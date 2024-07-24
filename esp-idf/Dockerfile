@@ -47,8 +47,8 @@ RUN : \
        esac \
     && NIM_PLATFORM=${TARGETOS}_${TARCH} \
     && env \
-    && echo "downloading: " https://nim-lang.org/download/nim-${NIM_VERSION}-linux_${NIM_PLATFORM}.tar.xz \
-    && wget https://nim-lang.org/download/nim-${NIM_VERSION}-linux_${NIM_PLATFORM}.tar.xz \
+    && echo "downloading: " https://nim-lang.org/download/nim-${NIM_VERSION}-${NIM_PLATFORM}.tar.xz \
+    && wget https://nim-lang.org/download/nim-${NIM_VERSION}-${NIM_PLATFORM}.tar.xz \
     && tar xf nim-${NIM_VERSION}-${NIM_PLATFORM}.tar.xz \
     && mv -v nim-* /usr/local/ \
     && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \

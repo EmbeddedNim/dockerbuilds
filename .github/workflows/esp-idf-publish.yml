@@ -31,8 +31,7 @@ jobs:
   build:
     strategy:
       matrix:
-        version: ["4.4"]
-        # version: ["5.0", "4.4"]
+        version: ["5.0", "4.4"]
         nim: ["1.6.20", "2.0.8"]
     runs-on: ubuntu-latest
     permissions:

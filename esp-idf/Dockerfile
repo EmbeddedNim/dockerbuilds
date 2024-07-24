@@ -1,7 +1,7 @@
 ARG IDF_VERSION=4.4
 ARG NIM_VERSION=1.6.20
 
-FROM espressif/idf:release-v${IDF_VERSION} as base
+FROM espressif/idf:release-v${IDF_VERSION} AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 

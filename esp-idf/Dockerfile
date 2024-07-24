@@ -23,13 +23,8 @@ RUN : \
 ENV IDF_CCACHE_ENABLE=1
 
 RUN : \
-  && git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.8.1
-
-RUN : \
     && echo '. /opt/esp/idf/export.sh' >> /etc/bash.bashrc \
-    && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc \
-    && echo '. $HOME/.asdf/asdf.sh' >> /etc/bash.bashrc \
-    && echo '. $HOME/.asdf/asdf.sh' >> /etc/zsh/zshrc
+    && echo '. /opt/esp/idf/export.sh' >> /etc/zsh/zshrc
 
 ARG TARGETPLATFORM
 ARG TARGETOS
@@ -42,11 +37,18 @@ ENV CACHE_NONCE=1
 
 RUN : \
   && cd $HOME/ \
-    && echo "IDF_VERSION: " ${IDF_VERSION} \
-    && echo "NIM: " ${NIM_VERSION} \
-    && find $HOME/.asdf \
-    && . $HOME/.asdf/asdf.sh \
-    && asdf plugin-add nim \
-    && asdf install nim ${NIM_VERSION} \
-    && asdf global nim ${NIM_VERSION} \
-    && echo "done"
+    && case ${TARGETARCH} in \
+         "arm64")        TARCH=arm64  ;; \
+         "amd64")        TARCH=linux_x64  ;; \
+         "arm")          TARCH=arm  ;; \
+         "386")          TARCH=x32  ;; \
+         *)              TARCH=${TARGETARCH} ;; \
+       esac \
+    && NIM_PLATFORM=${TARGETOS}_${TARCH} \
+    && env \
+    && wget https://nim-lang.org/download/nim-${NIM_VERSION}-linux_${NIM_PLATFORM}.tar.xz \
+    && tar xf nim-${NIM_VERSION}-${NIM_PLATFORM}.tar.xz \
+    && mv -v nim-* /usr/local/ \
+    && for b in atlas nim nimble nim_dbg nim-gdb nimgrep nimpretty nimsuggest testament; \
+      do ln -sf /usr/local/nim-*/bin/$b /usr/local/bin/; \
+    done

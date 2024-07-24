@@ -14,7 +14,6 @@ RUN : \
         build-essential \
         cmake \
         vim \
-        gcc \
         iputils-ping \
   && apt-get autoremove -y \
   && rm -rf /var/lib/apt/lists/*

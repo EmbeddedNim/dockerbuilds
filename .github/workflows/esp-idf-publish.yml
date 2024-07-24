@@ -91,7 +91,7 @@ jobs:
           build-args: |
             IDF_CLONE_BRANCH_OR_TAG=release/v${{ matrix.version }}
             IDF_VERSION=${{ matrix.version }}
-            NIM_VERSION=${{ matrix.version }}
+            NIM_VERSION=${{ matrix.nim }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           secrets: |
